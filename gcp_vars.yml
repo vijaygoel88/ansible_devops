@@ -1,0 +1,8 @@
+project_id: your-gcp-project-id
+auth_kind: serviceaccount
+service_account_file: ~/gcp-ansible-key.json
+zone: us-central1-a
+machine_type: e2-micro
+image_project: debian-cloud
+image_family: debian-11
+instance_name: demo-ansible-vm

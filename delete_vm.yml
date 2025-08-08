@@ -1,0 +1,16 @@
+---
+- name: Delete GCP VM
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - gcp_vars.yml
+
+  tasks:
+    - name: Delete VM instance
+      google.cloud.gce_instance:
+        project: "{{ project_id }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+        zone: "{{ zone }}"
+        name: "{{ instance_name }}"
+        state: absent

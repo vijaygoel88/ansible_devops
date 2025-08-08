@@ -1,0 +1,29 @@
+---
+- name: Create GCP VM
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - gcp_vars.yml
+
+  tasks:
+    - name: Create VM instance
+      google.cloud.gce_instance:
+        project: "{{ project_id }}"
+        auth_kind: "{{ auth_kind }}"
+        service_account_file: "{{ service_account_file }}"
+        zone: "{{ zone }}"
+        name: "{{ instance_name }}"
+        machine_type: "{{ machine_type }}"
+        disks:
+          - auto_delete: true
+            boot: true
+            initialize_params:
+              source_image: "projects/{{ image_project }}/global/images/family/{{ image_family }}"
+        network_interfaces:
+          - network: default
+            access_configs:
+              - name: External NAT
+                type: ONE_TO_ONE_NAT
+        tags: ["http-server"]
+        state: present
+
