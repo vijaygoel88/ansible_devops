@@ -1,16 +1,27 @@
 ---
-- name: Delete GCP VM
+- name: Delete GCP VM Safely
   hosts: localhost
   gather_facts: no
   vars_files:
     - gcp_vars.yml
 
   tasks:
+    - name: Confirm before deleting VM
+      pause:
+        prompt: "Type 'yes' to delete the VM {{ instance_name }} in {{ zone }}"
+      register: delete_confirm
+
     - name: Delete VM instance
-      google.cloud.gce_instance:
+      google.cloud.gcp_compute_instance:
         project: "{{ project_id }}"
         auth_kind: "{{ auth_kind }}"
         service_account_file: "{{ service_account_file }}"
         zone: "{{ zone }}"
         name: "{{ instance_name }}"
         state: absent
+      when: delete_confirm.user_input | lower == 'yes'
+
+    - name: Skip deletion message
+      debug:
+        msg: "Deletion skipped. You did not type 'yes'."
+      when: delete_confirm.user_input | lower != 'yes'

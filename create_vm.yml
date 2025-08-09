@@ -7,7 +7,7 @@
 
   tasks:
     - name: Create VM instance
-      google.cloud.gce_instance:
+      google.cloud.gcp_compute_instance:
         project: "{{ project_id }}"
         auth_kind: "{{ auth_kind }}"
         service_account_file: "{{ service_account_file }}"
@@ -20,10 +20,13 @@
             initialize_params:
               source_image: "projects/{{ image_project }}/global/images/family/{{ image_family }}"
         network_interfaces:
-          - network: default
+          - network:
+               name: ansible_gcp
             access_configs:
               - name: External NAT
                 type: ONE_TO_ONE_NAT
-        tags: ["http-server"]
+        tags:
+          items:
+            - http-server
         state: present
 

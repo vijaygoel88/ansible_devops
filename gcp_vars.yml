@@ -1,6 +1,6 @@
-project_id: your-gcp-project-id
+project_id: stars-390003
 auth_kind: serviceaccount
-service_account_file: ~/gcp-ansible-key.json
+service_account_file: /opt/gcp/ansible_devops/gcp-ansible-key.json
 zone: us-central1-a
 machine_type: e2-micro
 image_project: debian-cloud
